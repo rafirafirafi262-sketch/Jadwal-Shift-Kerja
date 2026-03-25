@@ -1,8 +1,8 @@
 export type ShiftType = 'Pagi' | 'Malam';
 
 export interface ShiftAssignment {
-  pagi: string[];
-  malam: string[];
+  pagi: { main: string[]; helper: string[] };
+  malam: { main: string[]; helper: string[] };
 }
 
 export interface DailySchedule {

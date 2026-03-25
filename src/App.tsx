@@ -14,7 +14,7 @@ import {
   Utensils
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SCHEDULE_DATA, STAFF_CONSTRAINTS, STAFF_LIST } from './constants';
+import { SCHEDULE_DATA, STAFF_CONSTRAINTS, STAFF_LIST, MAIN_ROSTER, HELPER_LIST } from './constants';
 import { DailySchedule } from './types';
 
 export default function App() {
@@ -92,7 +92,28 @@ export default function App() {
                   <span>Semua Staf</span>
                   {selectedStaff === null && <CheckCircle2 size={14} />}
                 </button>
-                {STAFF_LIST.map((staff) => (
+
+                <div className="mt-4 mb-2 px-2 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Roster Utama</div>
+                {MAIN_ROSTER.map((staff) => (
+                  <button
+                    key={staff}
+                    onClick={() => setSelectedStaff(staff)}
+                    className={`px-5 py-3 rounded-2xl text-xs font-bold transition-all text-left flex items-center justify-between uppercase tracking-wider ${
+                      selectedStaff === staff 
+                      ? 'bg-[#EE4D2D] text-white shadow-lg shadow-orange-900/40' 
+                      : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white border border-transparent hover:border-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <User size={14} />
+                      <span>{staff}</span>
+                    </div>
+                    {selectedStaff === staff && <CheckCircle2 size={14} />}
+                  </button>
+                ))}
+
+                <div className="mt-4 mb-2 px-2 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Helper</div>
+                {HELPER_LIST.map((staff) => (
                   <button
                     key={staff}
                     onClick={() => setSelectedStaff(staff)}
@@ -172,16 +193,29 @@ export default function App() {
                         </td>
                         <td className="p-6">
                           <div className="flex flex-wrap gap-2">
-                            {dayData.shifts.pagi.length > 0 ? (
-                              dayData.shifts.pagi.map(staff => (
-                                <StaffBadge 
-                                  key={staff} 
-                                  name={staff} 
-                                  isSelected={selectedStaff === staff}
-                                  isAnySelected={selectedStaff !== null}
-                                  type="pagi"
-                                />
-                              ))
+                            {dayData.shifts.pagi.main.length > 0 || dayData.shifts.pagi.helper.length > 0 ? (
+                              <>
+                                {dayData.shifts.pagi.main.map(staff => (
+                                  <StaffBadge 
+                                    key={staff} 
+                                    name={staff} 
+                                    isSelected={selectedStaff === staff}
+                                    isAnySelected={selectedStaff !== null}
+                                    type="pagi"
+                                    isHelper={false}
+                                  />
+                                ))}
+                                {dayData.shifts.pagi.helper.map(staff => (
+                                  <StaffBadge 
+                                    key={staff} 
+                                    name={staff} 
+                                    isSelected={selectedStaff === staff}
+                                    isAnySelected={selectedStaff !== null}
+                                    type="pagi"
+                                    isHelper={true}
+                                  />
+                                ))}
+                              </>
                             ) : (
                               <span className="text-slate-600 text-[10px] uppercase font-black tracking-widest italic">— Libur Pagi</span>
                             )}
@@ -189,13 +223,24 @@ export default function App() {
                         </td>
                         <td className="p-6">
                           <div className="flex flex-wrap gap-2">
-                            {dayData.shifts.malam.map(staff => (
+                            {dayData.shifts.malam.main.map(staff => (
                               <StaffBadge 
                                 key={staff} 
                                 name={staff} 
                                 isSelected={selectedStaff === staff}
                                 isAnySelected={selectedStaff !== null}
                                 type="malam"
+                                isHelper={false}
+                              />
+                            ))}
+                            {dayData.shifts.malam.helper.map(staff => (
+                              <StaffBadge 
+                                key={staff} 
+                                name={staff} 
+                                isSelected={selectedStaff === staff}
+                                isAnySelected={selectedStaff !== null}
+                                type="malam"
+                                isHelper={true}
                               />
                             ))}
                           </div>
@@ -211,7 +256,11 @@ export default function App() {
             <div className="mt-8 flex flex-wrap items-center gap-8 text-slate-500 text-[10px] font-black uppercase tracking-[0.15em]">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 rounded-md bg-[#EE4D2D] shadow-lg shadow-orange-900/20"></div>
-                <span>Staf Terpilih</span>
+                <span>Staf Utama</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 rounded-md border-2 border-dashed border-orange-500/50"></div>
+                <span>Helper (Adam/Farrel)</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 rounded-md bg-slate-800 border border-slate-700"></div>
@@ -233,12 +282,14 @@ function StaffBadge({
   name, 
   isSelected, 
   isAnySelected,
-  type 
+  type,
+  isHelper = false
 }: { 
   name: string; 
   isSelected: boolean; 
   isAnySelected: boolean;
   type: 'pagi' | 'malam';
+  isHelper?: boolean;
 }) {
   const isActive = isSelected || !isAnySelected;
   
@@ -249,7 +300,9 @@ function StaffBadge({
         ${isActive 
           ? isSelected 
             ? 'bg-[#EE4D2D] text-white scale-110 shadow-xl shadow-orange-900/40 border-transparent' 
-            : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'
+            : isHelper 
+              ? 'bg-orange-500/5 border-2 border-dashed border-orange-500/30 text-orange-400'
+              : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'
           : 'bg-slate-900/50 text-slate-700 opacity-20 grayscale border-transparent'
         }
       `}
@@ -259,7 +312,7 @@ function StaffBadge({
           ? 'bg-white animate-pulse' 
           : type === 'pagi' ? 'bg-orange-500' : 'bg-indigo-500'
       }`} />
-      {name}
+      {name} {isHelper && <span className="text-[8px] opacity-60">(H)</span>}
     </div>
   );
 }
