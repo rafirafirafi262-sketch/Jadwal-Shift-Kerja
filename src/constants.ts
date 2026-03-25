@@ -64,3 +64,13 @@ export const STAFF_CONSTRAINTS: StaffConstraint[] = [
   { name: 'Aisha', constraint: 'Berhalangan di Selasa/Rabu pagi' },
   { name: 'Ningrum', constraint: 'Berhalangan Sabtu pagi' }
 ];
+
+export const LEBARAN_SCHEDULE_DATA = [
+  { day: 'Senin', staff: ['Fiska', 'Ningrum', 'Adam'] },
+  { day: 'Selasa', staff: ['Aisha', 'Farrel', 'Fiska'] },
+  { day: 'Rabu', staff: ['Aisha', 'Adam', 'Ningrum'] },
+  { day: 'Kamis', staff: ['Farrel', 'Fiska', 'Adam'] },
+  { day: 'Jumat', staff: ['Aisha', 'Ningrum', 'Farrel'] },
+  { day: 'Sabtu', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] },
+  { day: 'Minggu', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] }
+];
