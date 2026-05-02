@@ -6,12 +6,12 @@ export const STAFF_LIST = [...MAIN_ROSTER, ...HELPER_LIST];
 
 export const SCHEDULE_DATA: DailySchedule[] = [
   { day: 'Senin', staff: ['Fiska', 'Ningrum', 'Adam'] },
-  { day: 'Selasa', staff: ['Aisha', 'Farrel', 'Fiska'] },
+  { day: 'Selasa', staff: ['Adam', 'Farrel', 'Fiska'] },
   { day: 'Rabu', staff: ['Aisha', 'Adam', 'Ningrum'] },
-  { day: 'Kamis', staff: ['Farrel', 'Fiska', 'Adam'] },
-  { day: 'Jumat', staff: ['Aisha', 'Ningrum', 'Farrel'] },
+  { day: 'Kamis', staff: ['Farrel', 'Fiska', 'Aisha'] },
+  { day: 'Jumat', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] },
   { day: 'Sabtu', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] },
-  { day: 'Minggu', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] }
+  { day: 'Minggu', staff: ['Aisha', 'Ningrum', 'Farrel'] }
 ];
 
 export const STAFF_CONSTRAINTS: StaffConstraint[] = [
