@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logoWkp from './logo_wkp.jpeg';
 import { 
   Calendar, 
   Clock, 
@@ -22,7 +23,7 @@ import {
   FileSpreadsheet,
   AlertCircle
 } from 'lucide-react';
-import logoWkp from './logo_wkp.jpeg';
+
 import { motion, AnimatePresence } from 'motion/react';
 import { SCHEDULE_DATA, STAFF_CONSTRAINTS, STAFF_LIST, MAIN_ROSTER, HELPER_LIST } from './constants';
 import { DailySchedule, AttendanceRecord } from './types';
