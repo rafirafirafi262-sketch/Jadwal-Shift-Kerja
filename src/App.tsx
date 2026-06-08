@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logoWkp from '/logo_wkp.jpeg';
 import { 
   Calendar, 
   Clock, 
@@ -128,16 +129,21 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white font-sans p-4 md:p-8 selection:bg-[#EE4D2D] selection:text-white">
+     <div className="min-h-screen bg-[#121212] text-white font-sans p-4 md:p-8 selection:bg-[#EE4D2D] selection:text-white">
       <div className="max-w-6xl mx-auto">
         {/* Header Section with WKP! Branding */}
         <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="flex items-center gap-6">
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#EE4D2D] rounded-full flex items-center justify-center shadow-2xl shadow-orange-900/20 border-4 border-[#1A1A1A] shrink-0">
-              <div className="text-center">
-                <span className="block text-3xl md:text-4xl font-black italic tracking-tighter text-white leading-none">WKP!</span>
-                <div className="h-1 w-12 bg-white mx-auto mt-1 rounded-full opacity-50"></div>
-              </div>
+            {/* Bagian div di bawah ini ditambahkan overflow-hidden */}
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#EE4D2D] rounded-full flex items-center justify-center shadow-2xl shadow-orange-900/20 border-4 border-[#1A1A1A] shrink-0 overflow-hidden">
+              
+              {/* Ini adalah tag img untuk memanggil logo kamu */}
+              <img 
+                src={logoWkp}
+                alt="Logo WKP" 
+                className="w-full h-full object-cover" 
+              />
+              
             </div>
             <div>
               <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white uppercase italic">
