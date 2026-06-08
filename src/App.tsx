@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logoWkp from './logo_wkp.jpeg';
+import logoWkp from '/logo_wkp.jpeg';
 import { 
   Calendar, 
   Clock, 
