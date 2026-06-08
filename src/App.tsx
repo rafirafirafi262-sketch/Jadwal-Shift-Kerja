@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import logoWkp from '/logo_wkp.jpeg';
 import { 
   Calendar, 
   Clock, 
@@ -19,11 +18,9 @@ import {
   UserCheck,
   History,
   CalendarDays,
-  
   FileSpreadsheet,
   AlertCircle
 } from 'lucide-react';
-
 import { motion, AnimatePresence } from 'motion/react';
 import { SCHEDULE_DATA, STAFF_CONSTRAINTS, STAFF_LIST, MAIN_ROSTER, HELPER_LIST } from './constants';
 import { DailySchedule, AttendanceRecord } from './types';
@@ -136,16 +133,11 @@ export default function App() {
         {/* Header Section with WKP! Branding */}
         <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="flex items-center gap-6">
-            {/* Bagian div di bawah ini ditambahkan overflow-hidden */}
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#EE4D2D] rounded-full flex items-center justify-center shadow-2xl shadow-orange-900/20 border-4 border-[#1A1A1A] shrink-0 overflow-hidden">
-              
-              {/* Ini adalah tag img untuk memanggil logo kamu */}
-              <img 
-                src={logoWkp}
-                alt="Logo WKP" 
-                className="w-full h-full object-cover" 
-              />
-              
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#EE4D2D] rounded-full flex items-center justify-center shadow-2xl shadow-orange-900/20 border-4 border-[#1A1A1A] shrink-0">
+              <div className="text-center">
+                <span className="block text-3xl md:text-4xl font-black italic tracking-tighter text-white leading-none">WKP!</span>
+                <div className="h-1 w-12 bg-white mx-auto mt-1 rounded-full opacity-50"></div>
+              </div>
             </div>
             <div>
               <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white uppercase italic">
@@ -521,7 +513,7 @@ export default function App() {
                     <table className="w-full border-collapse">
                       <thead>
                         <tr className="bg-slate-900/80 border-b border-slate-800">
-                          <th className="p-4 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest">Nama Staf</th>
+                          <th className="p-4 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest sticky left-0 bg-[#161D2F] z-20 border-r border-slate-800/80 min-w-[130px] shadow-[4px_0_8px_rgba(0,0,0,0.4)]">Nama Staf</th>
                           {DAYS_LIST.map((day) => (
                             <th key={day} className="p-3 text-center text-[9px] font-black text-slate-500 uppercase tracking-widest min-w-[75px]">
                               {day}
@@ -542,7 +534,7 @@ export default function App() {
 
                           return (
                             <tr key={staff} className="border-b border-slate-800/30 hover:bg-white/[0.01] transition-all">
-                              <td className="p-4">
+                              <td className="p-4 sticky left-0 bg-[#1A1A1A] z-10 border-r border-slate-800/60 min-w-[130px] shadow-[4px_0_8px_rgba(0,0,0,0.4)]">
                                 <div className="flex items-center gap-2">
                                   <span className="font-bold text-sm text-slate-200">{staff}</span>
                                   {isHelper && (
