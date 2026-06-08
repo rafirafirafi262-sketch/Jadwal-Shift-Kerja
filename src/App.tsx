@@ -54,6 +54,32 @@ export default function App() {
     return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
   };
 
+  const getShiftEndLimit = (day: string): string => {
+    if (day === 'Jumat' || day === 'Sabtu') {
+      return '24:00';
+    }
+    return '23:00'; // Senin - Kamis, Dan Minggu
+  };
+
+  const calculateWorkedHours = (day: string, timeStr: string): number => {
+    const limitStr = getShiftEndLimit(day);
+    const [inH, inM] = timeStr.split(':').map(Number);
+    if (isNaN(inH) || isNaN(inM)) return 0;
+
+    const limitH = limitStr === '24:00' ? 24 : 23;
+    const limitM = 0;
+
+    const inMinutes = inH * 60 + inM;
+    const limitMinutes = limitH * 60 + limitM;
+
+    if (inMinutes >= limitMinutes) {
+      return 0;
+    }
+
+    const diffMin = limitMinutes - inMinutes;
+    return parseFloat((diffMin / 60).toFixed(1));
+  };
+
   const [absenStaff, setAbsenStaff] = useState<string>('');
   const [absenDay, setAbsenDay] = useState<string>(mapDateToIndoDay());
   const [absenTime, setAbsenTime] = useState<string>(getHHMM());
@@ -424,8 +450,14 @@ export default function App() {
                         onChange={(e) => setAbsenTime(e.target.value)}
                         className="w-full bg-[#121212] border border-slate-800 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-[#EE4D2D] text-white"
                       />
-                      <p className="text-[9px] text-slate-500 mt-1 italic">
-                        Rekomendasi shift sore: masuk pukul 16.00
+                      <p className="text-[9px] text-slate-500 mt-1.5 italic leading-relaxed">
+                        Rekomendasi shift sore: masuk pukul 16.00.
+                        <br />
+                        <span className="text-[#EE4D2D]/90 font-bold">* Jam kerja otomatis dihitung s.d batas selesai:</span>
+                        <br />
+                        • Senin - Kamis & Minggu s.d <span className="text-white font-bold">23:00</span> (max 7 jam)
+                        <br />
+                        • Jumat - Sabtu s.d <span className="text-white font-bold">24:00</span> (max 8 jam)
                       </p>
                     </div>
 
@@ -477,18 +509,18 @@ export default function App() {
                       Reset Rekapan
                     </button>
                   </div>
-
                   <div className="overflow-x-auto rounded-2xl border border-slate-800/50">
                     <table className="w-full border-collapse">
                       <thead>
                         <tr className="bg-slate-900/80 border-b border-slate-800">
                           <th className="p-4 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest">Nama Staf</th>
                           {DAYS_LIST.map((day) => (
-                            <th key={day} className="p-3 text-center text-[9px] font-black text-slate-500 uppercase tracking-widest min-w-[72px]">
+                            <th key={day} className="p-3 text-center text-[9px] font-black text-slate-500 uppercase tracking-widest min-w-[75px]">
                               {day}
                             </th>
                           ))}
-                          <th className="p-4 text-center text-[9px] font-black text-[#EE4D2D] uppercase tracking-widest min-w-[65px]">Kehadiran</th>
+                          <th className="p-4 text-center text-[9px] font-black text-slate-400 uppercase tracking-widest min-w-[75px] border-l border-slate-800/80">Kehadiran</th>
+                          <th className="p-4 text-center text-[9px] font-black text-[#EE4D2D] uppercase tracking-widest min-w-[95px] border-l border-slate-800/80 bg-slate-900/40">Total Jam</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -496,6 +528,9 @@ export default function App() {
                           const isHelper = HELPER_LIST.includes(staff);
                           const staffRecords = attendance.filter((r) => r.name === staff);
                           const uniqueDaysCount = new Set(staffRecords.map((r) => r.day)).size;
+                          const totalHours = staffRecords.reduce((sum, record) => {
+                            return sum + calculateWorkedHours(record.day, record.time);
+                          }, 0);
 
                           return (
                             <tr key={staff} className="border-b border-slate-800/30 hover:bg-white/[0.01] transition-all">
@@ -515,32 +550,61 @@ export default function App() {
                                 return (
                                   <td key={day} className="p-3 text-center">
                                     {dayRecords.length > 0 ? (
-                                      <div className="flex flex-col gap-1 items-center justify-center">
-                                        {dayRecords.map((record, index) => (
-                                          <span
-                                            key={record.id || index}
-                                            className="bg-emerald-500/10 border border-emerald-505/20 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-lg flex items-center gap-1 shadow-sm font-mono"
-                                          >
-                                            <span className="w-1 h-1 rounded-full bg-emerald-500"></span>
-                                            {record.time}
-                                          </span>
-                                        ))}
+                                      <div className="flex flex-col gap-1.5 items-center justify-center">
+                                        {dayRecords.map((record, index) => {
+                                          const hrs = calculateWorkedHours(record.day, record.time);
+                                          return (
+                                            <div
+                                              key={record.id || index}
+                                              className="bg-[#121212]/80 border border-emerald-500/15 text-slate-200 text-[10px] px-2 py-1 rounded-xl flex flex-col items-center justify-center gap-0.5 shadow-md font-mono min-w-[62px]"
+                                              title={`Batas keluar hari ${record.day}: ${getShiftEndLimit(record.day)}`}
+                                            >
+                                              <span className="flex items-center gap-1 font-extrabold text-slate-200">
+                                                <span className="w-1 h-1 rounded-full bg-emerald-500"></span>
+                                                {record.time}
+                                              </span>
+                                              <span className="text-[8.5px] text-emerald-400 font-extrabold">
+                                                {hrs} Jam
+                                              </span>
+                                            </div>
+                                          );
+                                        })}
                                       </div>
                                     ) : (
-                                      <span className="text-slate-800 font-bold text-xs">—</span>
+                                      <span className="text-slate-850 font-extrabold text-xs">—</span>
                                     )}
                                   </td>
                                 );
                               })}
 
-                              <td className="p-4 text-center">
-                                <span className={`font-black text-xs px-3 py-1 rounded-full ${
-                                  uniqueDaysCount > 0
-                                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                    : 'bg-slate-800 text-slate-500 border border-slate-700/50'
-                                }`}>
-                                  {uniqueDaysCount} Hari
-                                </span>
+                              <td className="p-4 text-center border-l border-slate-800/40">
+                                {uniqueDaysCount > 0 ? (
+                                  <div className="inline-flex flex-col items-center justify-center">
+                                    <span className="text-sm font-black text-slate-100 font-mono leading-none">
+                                      {uniqueDaysCount}
+                                    </span>
+                                    <span className="text-[8px] font-bold tracking-widest text-slate-500 uppercase mt-1 leading-none">
+                                      Hari
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-slate-800 font-bold text-xs">—</span>
+                                )}
+                              </td>
+
+                              <td className="p-4 text-center border-l border-slate-800/40 bg-slate-900/20">
+                                {totalHours > 0 ? (
+                                  <div className="inline-flex flex-col items-center justify-center">
+                                    <span className="text-sm font-black text-[#EE4D2D] font-mono leading-none">
+                                      {totalHours.toFixed(1)}
+                                    </span>
+                                    <span className="text-[8px] font-bold tracking-widest text-[#EE4D2D]/60 uppercase mt-1 leading-none font-sans">
+                                      Jam Kerja
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-slate-800 font-semibold text-xs">—</span>
+                                )}
                               </td>
                             </tr>
                           );
@@ -591,6 +655,9 @@ export default function App() {
                                 </div>
                                 <p className="text-[10px] text-slate-500 mt-1">
                                   Masuk Kerja: <span className="text-emerald-400 font-black">{record.time}</span>
+                                  <span className="text-slate-700 mx-1.5">•</span>
+                                  Estimasi Kerja: <span className="text-indigo-400 font-black">{calculateWorkedHours(record.day, record.time)} Jam</span>{" "}
+                                  <span className="text-slate-600 text-[9px] italic">(Batas {getShiftEndLimit(record.day)})</span>
                                 </p>
                               </div>
                             </div>
