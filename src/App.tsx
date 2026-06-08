@@ -18,9 +18,11 @@ import {
   UserCheck,
   History,
   CalendarDays,
+  
   FileSpreadsheet,
   AlertCircle
 } from 'lucide-react';
+import logoWkp from './logo_wkp.jpeg';
 import { motion, AnimatePresence } from 'motion/react';
 import { SCHEDULE_DATA, STAFF_CONSTRAINTS, STAFF_LIST, MAIN_ROSTER, HELPER_LIST } from './constants';
 import { DailySchedule, AttendanceRecord } from './types';
@@ -138,7 +140,7 @@ export default function App() {
               
               {/* Ini adalah tag img untuk memanggil logo kamu */}
               <img 
-                src="src/logo_wkp.jpeg" 
+                src={logoWkp}
                 alt="Logo WKP" 
                 className="w-full h-full object-cover" 
               />
