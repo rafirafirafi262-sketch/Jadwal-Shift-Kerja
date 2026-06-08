@@ -138,7 +138,7 @@ export default function App() {
               
               {/* Ini adalah tag img untuk memanggil logo kamu */}
               <img 
-                src="public/logo_wkp.jpeg" 
+                src="src/logo_wkp.jpeg" 
                 alt="Logo WKP" 
                 className="w-full h-full object-cover" 
               />
