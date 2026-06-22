@@ -1,22 +1,24 @@
 import { DailySchedule, StaffConstraint } from './types';
 
-export const MAIN_ROSTER = ['Fiska', 'Ningrum', 'Aisha'];
-export const HELPER_LIST = ['Adam', 'Farrel'];
-export const STAFF_LIST = [...MAIN_ROSTER, ...HELPER_LIST];
+export const MAIN_ROSTER = ['Pegawai 1', 'Pegawai 2', 'Fiska', 'Ningrum', 'Aisha', 'Adam'];
+export const HELPER_LIST: string[] = [];
+export const STAFF_LIST = [...MAIN_ROSTER];
 
 export const SCHEDULE_DATA: DailySchedule[] = [
-  { day: 'Senin', staff: ['Fiska', 'Ningrum', 'Adam'] },
-  { day: 'Selasa', staff: ['Adam', 'Farrel', 'Fiska'] },
-  { day: 'Rabu', staff: ['Aisha', 'Adam', 'Ningrum'] },
-  { day: 'Kamis', staff: ['Farrel', 'Fiska', 'Aisha'] },
-  { day: 'Jumat', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] },
-  { day: 'Sabtu', staff: ['Fiska', 'Ningrum', 'Aisha', 'Adam', 'Farrel'] },
-  { day: 'Minggu', staff: ['Aisha', 'Ningrum', 'Farrel'] }
+  { day: 'Senin', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska'] },
+  { day: 'Selasa', staff: ['Pegawai 1', 'Pegawai 2', 'Adam'] },
+  { day: 'Rabu', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska'] },
+  { day: 'Kamis', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska'] },
+  { day: 'Jumat', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska', 'Aisha'] },
+  { day: 'Sabtu', staff: ['Pegawai 1', 'Pegawai 2', 'Aisha'] },
+  { day: 'Minggu', staff: ['Pegawai 1', 'Pegawai 2', 'Aisha', 'Adam'] }
 ];
 
 export const STAFF_CONSTRAINTS: StaffConstraint[] = [
-  { name: 'Roster Utama', constraint: 'Fiska, Ningrum, Aisha' },
-  { name: 'Helper (Opsional)', constraint: 'Adam & Farrel (Bisa datang/tidak)' },
-  { name: 'Aisha & Farrel', constraint: 'Libur Senin' },
-  { name: 'Jam Operasional', constraint: '16.00 – 24.00 (Shift Sore/Malam)' }
+  { name: 'Roster Utama', constraint: 'Pegawai 1, Pegawai 2, Fiska, Ningrum, Aisha, Adam' },
+  { name: 'Pegawai 1 & Pegawai 2', constraint: 'Piket Penuh / Tidak Ada Hari Libur' },
+  { name: 'Fiska', constraint: 'Jadwal Tetap (Senin, Rabu, Kamis, Jumat)' },
+  { name: 'Ningrum', constraint: 'Off / Cuti Selama 1 Minggu' },
+  { name: 'Aisha', constraint: 'Bertugas hari Jumat, Sabtu, Minggu' },
+  { name: 'Adam', constraint: 'Bertugas hari Selasa & Minggu' }
 ];

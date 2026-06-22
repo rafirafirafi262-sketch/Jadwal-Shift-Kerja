@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import logoWkp from '/logo_wkp.jpeg';
 import { 
   Calendar, 
   Clock, 
@@ -129,21 +128,16 @@ export default function App() {
   };
 
   return (
-     <div className="min-h-screen bg-[#121212] text-white font-sans p-4 md:p-8 selection:bg-[#EE4D2D] selection:text-white">
+    <div className="min-h-screen bg-[#121212] text-white font-sans p-4 md:p-8 selection:bg-[#EE4D2D] selection:text-white">
       <div className="max-w-6xl mx-auto">
         {/* Header Section with WKP! Branding */}
         <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="flex items-center gap-6">
-            {/* Bagian div di bawah ini ditambahkan overflow-hidden */}
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#EE4D2D] rounded-full flex items-center justify-center shadow-2xl shadow-orange-900/20 border-4 border-[#1A1A1A] shrink-0 overflow-hidden">
-              
-              {/* Ini adalah tag img untuk memanggil logo kamu */}
-              <img 
-                src={logoWkp}
-                alt="Logo WKP" 
-                className="w-full h-full object-cover" 
-              />
-              
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#EE4D2D] rounded-full flex items-center justify-center shadow-2xl shadow-orange-900/20 border-4 border-[#1A1A1A] shrink-0">
+              <div className="text-center">
+                <span className="block text-3xl md:text-4xl font-black italic tracking-tighter text-white leading-none">WKP!</span>
+                <div className="h-1 w-12 bg-white mx-auto mt-1 rounded-full opacity-50"></div>
+              </div>
             </div>
             <div>
               <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white uppercase italic">
@@ -158,7 +152,10 @@ export default function App() {
                   <Utensils size={12} />
                   <span>Food</span>
                 </div>
-                <span className="text-sm">• Shift Schedule 2026</span>
+                <span className="text-sm text-amber-500 font-extrabold bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20 shadow-md flex items-center gap-1">
+                  <Calendar size={12} />
+                  <span>Roster s/d Awal Juli Only</span>
+                </span>
               </div>
             </div>
           </div>
@@ -200,7 +197,7 @@ export default function App() {
             }`}
           >
             <Clock size={14} />
-            <span>⏱️ Absensi & Rekap</span>
+            <span>⏱️ Absensi & Rekap (Belum Bisa)</span>
           </button>
         </div>
 
@@ -235,27 +232,8 @@ export default function App() {
                       {selectedStaff === null && <CheckCircle2 size={14} />}
                     </button>
 
-                    <div className="mt-4 mb-2 px-2 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Roster Utama</div>
+                    <div className="mt-4 mb-2 px-2 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Daftar Staf</div>
                     {MAIN_ROSTER.map((staff) => (
-                      <button
-                        key={staff}
-                        onClick={() => setSelectedStaff(staff)}
-                        className={`px-5 py-3 rounded-2xl text-xs font-bold transition-all text-left flex items-center justify-between uppercase tracking-wider cursor-pointer ${
-                          selectedStaff === staff 
-                          ? 'bg-[#EE4D2D] text-white shadow-lg shadow-orange-900/40' 
-                          : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white border border-transparent hover:border-slate-700'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <User size={14} />
-                          <span>{staff}</span>
-                        </div>
-                        {selectedStaff === staff && <CheckCircle2 size={14} />}
-                      </button>
-                    ))}
-
-                    <div className="mt-4 mb-2 px-2 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Helper</div>
-                    {HELPER_LIST.map((staff) => (
                       <button
                         key={staff}
                         onClick={() => setSelectedStaff(staff)}
@@ -300,7 +278,15 @@ export default function App() {
               </aside>
 
               {/* Main Content: Schedule Table */}
-              <main className="lg:col-span-3">
+              <main className="lg:col-span-3 space-y-4">
+                {/* Banner Jadwal Berlaku */}
+                <div className="bg-amber-500/10 border border-amber-500/15 rounded-2xl p-4 flex items-center gap-3 text-amber-400">
+                  <CalendarDays size={18} className="shrink-0 text-amber-500" />
+                  <div className="text-xs font-bold leading-normal">
+                    <span>Informasi Roster: Jadwal kerja ini khusus <strong>berlaku hingga awal Juli 2026 saja</strong>. Penyesuaian shift berikutnya akan diperbarui setelah periode tersebut selesai.</span>
+                  </div>
+                </div>
+
                 <div className="bg-[#1A1A1A] rounded-3xl shadow-2xl border border-slate-800/50 overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
@@ -351,15 +337,11 @@ export default function App() {
                 <div className="mt-8 flex flex-wrap items-center gap-8 text-slate-500 text-[10px] font-black uppercase tracking-[0.15em]">
                   <div className="flex items-center gap-3">
                     <div className="w-4 h-4 rounded-md bg-[#EE4D2D] shadow-lg shadow-orange-900/20"></div>
-                    <span>Staf Utama</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-4 h-4 rounded-md border-2 border-dashed border-orange-500/50"></div>
-                    <span>Helper (Adam/Farrel)</span>
+                    <span>Staf Terpilih</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-4 h-4 rounded-md bg-slate-800 border border-slate-700"></div>
-                    <span>Staf Lainnya</span>
+                    <span>Staf Bertugas</span>
                   </div>
                   <div className="ml-auto flex items-center gap-2 text-slate-400">
                     <Users size={14} />
@@ -371,13 +353,30 @@ export default function App() {
           ) : (
             <motion.div
               key="attendance-view"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8"
+              className="flex flex-col items-center justify-center py-20 px-6 text-center max-w-2xl mx-auto w-full"
             >
-              {/* Form Absen - Column 4 */}
+              <div className="w-20 h-20 bg-amber-500/10 border border-amber-500/15 rounded-full flex items-center justify-center mb-6 shadow-xl text-amber-500 animate-pulse">
+                <AlertCircle size={36} />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white mb-3">
+                Fitur Absensi Belum Bisa Digunakan
+              </h2>
+              <div className="h-1 w-16 bg-[#EE4D2D] rounded-full mb-4"></div>
+              <p className="text-slate-400 font-medium text-sm leading-relaxed mb-6">
+                Maaf, modul pencatatan dan rekapan absensi masuk saat ini masih belum aktif/belum bisa digunakan. Kami sedang mematangkan integrasi database roster baru serta kalkulasi jam kehadiran yang lebih akurat. Silakan gunakan tab <strong className="text-[#EE4D2D]">📋 Jadwal Kerja</strong> di atas untuk memantau giliran shift staf harian kami.
+              </p>
+              <div className="bg-[#1A1A1A] border border-slate-800/80 rounded-2xl px-6 py-4 flex items-center gap-3 text-left w-full sm:w-auto shadow-lg mb-8">
+                <Coffee className="text-[#EE4D2D] shrink-0" size={18} />
+                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Warung Kopi & Panganan • Roster Management</span>
+              </div>
+
+              {/* Sembunyikan form terdahulu */}
+              <div className="hidden">
+                {/* Form Absen - Column 4 */}
               <div className="lg:col-span-4 space-y-6">
                 <section className="bg-[#1A1A1A] rounded-3xl p-6 shadow-xl border border-slate-800/50">
                   <div className="flex items-center gap-2 mb-6 text-white font-black uppercase tracking-widest text-xs">
@@ -680,6 +679,7 @@ export default function App() {
                     </div>
                   )}
                 </section>
+              </div>
               </div>
             </motion.div>
           )}
