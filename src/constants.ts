@@ -1,24 +1,22 @@
 import { DailySchedule, StaffConstraint } from './types';
 
-export const MAIN_ROSTER = ['Pegawai 1', 'Pegawai 2', 'Fiska', 'Ningrum', 'Aisha', 'Adam'];
+export const MAIN_ROSTER = ['Rafi', 'Fiska', 'Pasya', 'Aisha', 'Lutfhi'];
 export const HELPER_LIST: string[] = [];
 export const STAFF_LIST = [...MAIN_ROSTER];
 
 export const SCHEDULE_DATA: DailySchedule[] = [
-  { day: 'Senin', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska'] },
-  { day: 'Selasa', staff: ['Pegawai 1', 'Pegawai 2', 'Adam'] },
-  { day: 'Rabu', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska'] },
-  { day: 'Kamis', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska'] },
-  { day: 'Jumat', staff: ['Pegawai 1', 'Pegawai 2', 'Fiska', 'Aisha'] },
-  { day: 'Sabtu', staff: ['Pegawai 1', 'Pegawai 2', 'Aisha'] },
-  { day: 'Minggu', staff: ['Pegawai 1', 'Pegawai 2', 'Aisha', 'Adam'] }
+  { day: 'Senin', pagi: [], sore: ['Rafi', 'Fiska', 'Pasya'], libur: ['Aisha', 'Lutfhi'] },
+  { day: 'Selasa', pagi: [], sore: ['Fiska', 'Pasya', 'Lutfhi'], libur: ['Rafi', 'Aisha'] },
+  { day: 'Rabu', pagi: [], sore: ['Fiska', 'Aisha'], libur: ['Rafi', 'Pasya', 'Lutfhi'] },
+  { day: 'Kamis', pagi: [], sore: ['Rafi', 'Aisha', 'Lutfhi'], libur: ['Fiska', 'Pasya'] },
+  { day: 'Jumat', pagi: [], sore: ['Aisha', 'Pasya', 'Lutfhi'], libur: ['Rafi', 'Fiska'] },
+  { day: 'Sabtu', pagi: ['Fiska', 'Pasya'], sore: ['Rafi', 'Aisha', 'Lutfhi'], libur: [] },
+  { day: 'Minggu', pagi: ['Rafi', 'Aisha'], sore: ['Fiska', 'Pasya', 'Lutfhi'], libur: [] }
 ];
 
 export const STAFF_CONSTRAINTS: StaffConstraint[] = [
-  { name: 'Roster Utama', constraint: 'Pegawai 1, Pegawai 2, Fiska, Ningrum, Aisha, Adam' },
-  { name: 'Pegawai 1 & Pegawai 2', constraint: 'Piket Penuh / Tidak Ada Hari Libur' },
-  { name: 'Fiska', constraint: 'Jadwal Tetap (Senin, Rabu, Kamis, Jumat)' },
-  { name: 'Ningrum', constraint: 'Off / Cuti Selama 1 Minggu' },
-  { name: 'Aisha', constraint: 'Bertugas hari Jumat, Sabtu, Minggu' },
-  { name: 'Adam', constraint: 'Bertugas hari Selasa & Minggu' }
+  { name: 'Roster Utama', constraint: 'Rafi, Fiska, Pasya, Aisha, Lutfhi' },
+  { name: 'Shift Pagi', constraint: 'Hanya ada di hari Sabtu & Minggu (2 Orang)' },
+  { name: 'Shift Sore', constraint: 'Setiap hari (Maksimal 3 Orang)' },
+  { name: 'Keterangan Libur', constraint: 'Staf yang tertulis ⛔ Libur tidak bertugas pada hari tersebut' }
 ];

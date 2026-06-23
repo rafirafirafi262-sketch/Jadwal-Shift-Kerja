@@ -87,7 +87,11 @@ export default function App() {
 
   // Sync with localStorage
   useEffect(() => {
-    localStorage.setItem('wkp_attendance', JSON.stringify(attendance));
+    try {
+      localStorage.setItem('wkp_attendance', JSON.stringify(attendance));
+    } catch (e) {
+      console.warn('Failed to save to localStorage:', e);
+    }
   }, [attendance]);
 
   // Handle setting time to now
@@ -103,7 +107,7 @@ export default function App() {
     }
 
     const newRecord: AttendanceRecord = {
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
+      id: (typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
       name: absenStaff,
       day: absenDay,
       time: absenTime,
@@ -160,16 +164,23 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <div className="flex gap-3">
-              <div className="bg-[#1A1A1A] border border-slate-800 rounded-2xl p-4 flex items-center gap-4 shadow-xl">
-                <div className="bg-indigo-500/10 text-indigo-400 p-2.5 rounded-xl border border-indigo-500/20">
-                  <Moon size={20} />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-0.5">Shift Sore/Malam</p>
-                  <p className="text-sm font-bold">16.00 – 24.00</p>
-                </div>
+          <div className="flex flex-wrap gap-3">
+            <div className="bg-[#1A1A1A] border border-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-xl">
+              <div className="bg-amber-500/10 text-amber-500 p-2.5 rounded-xl border border-amber-500/20">
+                <Sun size={18} />
+              </div>
+              <div>
+                <p className="text-[9px] uppercase font-black text-slate-500 tracking-widest mb-0.5">Shift Pagi (Weekend)</p>
+                <p className="text-xs font-bold">Sabtu & Minggu</p>
+              </div>
+            </div>
+            <div className="bg-[#1A1A1A] border border-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-xl">
+              <div className="bg-indigo-500/10 text-indigo-400 p-2.5 rounded-xl border border-indigo-500/20">
+                <Moon size={18} />
+              </div>
+              <div>
+                <p className="text-[9px] uppercase font-black text-slate-500 tracking-widest mb-0.5">Shift Sore/Malam</p>
+                <p className="text-xs font-bold">16.00 – 24.00 (Setiap Hari)</p>
               </div>
             </div>
           </div>
@@ -292,11 +303,23 @@ export default function App() {
                     <table className="w-full border-collapse">
                       <thead>
                         <tr className="bg-slate-900/50 border-b border-slate-800">
-                          <th className="p-6 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] w-36">Hari</th>
-                          <th className="p-6 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                          <th className="p-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] w-32">Hari</th>
+                          <th className="p-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] min-w-[180px]">
+                            <div className="flex items-center gap-2">
+                              <Sun size={14} className="text-amber-500" />
+                              Shift Pagi (2 Orang)
+                            </div>
+                          </th>
+                          <th className="p-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] min-w-[240px]">
                             <div className="flex items-center gap-2">
                               <Moon size={14} className="text-[#EE4D2D]" />
-                              Staf Bertugas (Shift Sore/Malam)
+                              Shift Sore (Maks 3 Orang)
+                            </div>
+                          </th>
+                          <th className="p-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] min-w-[200px]">
+                            <div className="flex items-center gap-2">
+                              <AlertCircle size={14} className="text-rose-500" />
+                              Keterangan Libur
                             </div>
                           </th>
                         </tr>
@@ -310,21 +333,64 @@ export default function App() {
                             transition={{ delay: idx * 0.05 }}
                             className="border-b border-slate-800/30 hover:bg-white/[0.02] transition-colors"
                           >
-                            <td className="p-6">
+                            <td className="p-5">
                               <span className="text-lg font-black italic uppercase tracking-tighter text-white">{dayData.day}</span>
                             </td>
-                            <td className="p-6">
+                            <td className="p-5">
+                              {dayData.pagi.length === 0 ? (
+                                <span className="text-xs italic text-slate-600 font-medium font-sans">*(Libur Pagi)*</span>
+                              ) : (
+                                <div className="flex flex-wrap gap-2">
+                                  {dayData.pagi.map(staff => (
+                                    <StaffBadge 
+                                      key={staff} 
+                                      name={staff} 
+                                      isSelected={selectedStaff === staff}
+                                      isAnySelected={selectedStaff !== null}
+                                      isHelper={false}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </td>
+                            <td className="p-5">
                               <div className="flex flex-wrap gap-2">
-                                {dayData.staff.map(staff => (
+                                {dayData.sore.map(staff => (
                                   <StaffBadge 
                                     key={staff} 
                                     name={staff} 
                                     isSelected={selectedStaff === staff}
                                     isAnySelected={selectedStaff !== null}
-                                    isHelper={HELPER_LIST.includes(staff)}
+                                    isHelper={false}
                                   />
                                 ))}
                               </div>
+                            </td>
+                            <td className="p-5">
+                              {dayData.libur.length === 0 ? (
+                                <span className="inline-flex items-center gap-1.5 text-emerald-400/90 text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                  Semua Masuk
+                                </span>
+                              ) : (
+                                <div className="flex flex-wrap gap-1.5">
+                                  {dayData.libur.map(staff => {
+                                    const isActive = selectedStaff === staff || selectedStaff === null;
+                                    return (
+                                      <div 
+                                        key={staff} 
+                                        className={`px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 border transition-all duration-300 ${
+                                          isActive 
+                                            ? 'bg-rose-500/10 border-rose-500/20 text-rose-400' 
+                                            : 'bg-slate-900/50 text-slate-700 opacity-20 border-transparent'
+                                        }`}
+                                      >
+                                        <span>⛔ {staff}</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
                             </td>
                           </motion.tr>
                         ))}

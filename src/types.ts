@@ -1,6 +1,8 @@
 export interface DailySchedule {
   day: string;
-  staff: string[];
+  pagi: string[];
+  sore: string[];
+  libur: string[];
 }
 
 export interface StaffConstraint {
