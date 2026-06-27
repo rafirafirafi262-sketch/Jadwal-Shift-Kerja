@@ -158,7 +158,7 @@ export default function App() {
                 </div>
                 <span className="text-sm text-amber-500 font-extrabold bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20 shadow-md flex items-center gap-1">
                   <Calendar size={12} />
-                  <span>Roster s/d Awal Juli Only</span>
+                  <span>Roster Mulai Awal Juli 2026</span>
                 </span>
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function App() {
                 <div className="bg-amber-500/10 border border-amber-500/15 rounded-2xl p-4 flex items-center gap-3 text-amber-400">
                   <CalendarDays size={18} className="shrink-0 text-amber-500" />
                   <div className="text-xs font-bold leading-normal">
-                    <span>Informasi Roster: Jadwal kerja ini khusus <strong>berlaku hingga awal Juli 2026 saja</strong>. Penyesuaian shift berikutnya akan diperbarui setelah periode tersebut selesai.</span>
+                    <span>Informasi Roster: Jadwal kerja ini baru <strong>mulai berlaku sejak awal bulan Juli 2026</strong>. Silakan gunakan jadwal ini sebagai acuan pembagian shift tugas mingguan.</span>
                   </div>
                 </div>
 
